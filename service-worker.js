@@ -1,10 +1,10 @@
 const CACHE_NAME = 'lori-music-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/script.js',
-  '/manifest.json',
+  './',
+  './index.html',
+  './style.css',
+  './script.js',
+  './manifest.json',
   'https://www.youtube.com/iframe_api'
 ];
 
@@ -53,7 +53,7 @@ self.addEventListener('fetch', function(event) {
         }).catch(function() {
           // Network failed, try to serve offline page or show appropriate message
           if (event.request.destination === 'document') {
-            return caches.match('/index.html');
+            return caches.match('./index.html');
           }
         });
       })
@@ -89,8 +89,8 @@ self.addEventListener('sync', function(event) {
 self.addEventListener('push', function(event) {
   const options = {
     body: 'Muzika juaj po luhet!',
-    icon: '/icons/icon-192x192.png',
-    badge: '/icons/icon-72x72.png'
+    icon: './icons/icon-192x192.svg',
+    badge: './icons/icon-72x72.svg'
   };
 
   event.waitUntil(
@@ -103,7 +103,7 @@ self.addEventListener('notificationclick', function(event) {
   event.notification.close();
 
   event.waitUntil(
-    clients.openWindow('/')
+    clients.openWindow('./')
   );
 });
 

@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeApp() {
     // Register service worker
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/service-worker.js')
+        navigator.serviceWorker.register('./service-worker.js')
             .then(function(registration) {
                 console.log('Service Worker registered successfully:', registration.scope);
             })
@@ -153,6 +153,9 @@ function setupEventListeners() {
     
     // Add keyboard shortcuts
     document.addEventListener('keydown', handleKeyboardShortcuts);
+    
+    // Request microphone permission on first user interaction
+    voiceBtn.addEventListener('click', requestMicrophonePermission, { once: true });
 }
 
 function handleKeyboardShortcuts(event) {
@@ -266,6 +269,19 @@ function resetProgress() {
     totalTimeDisplay.textContent = '0:00';
     songDuration = 0;
     stopProgressUpdates();
+}
+
+async function requestMicrophonePermission() {
+    try {
+        // Request microphone permission explicitly
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        // Stop the stream immediately, we just needed permission
+        stream.getTracks().forEach(track => track.stop());
+        console.log('Microphone permission granted');
+    } catch (error) {
+        console.error('Microphone permission denied:', error);
+        showError('Ju lutem lejoni përdorimin e mikrofonit për të përdorur kërkimin me zë.');
+    }
 }
 
 function toggleVoiceRecognition() {

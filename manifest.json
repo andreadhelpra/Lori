@@ -3,7 +3,8 @@
   "short_name": "Lori",
   "description": "Aplikacion i thjeshtë për të dëgjuar muzikë me zë në shqip",
   "version": "1.0.0",
-  "start_url": "/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#667eea",
   "theme_color": "#4A90E2",
@@ -12,49 +13,49 @@
   "lang": "sq",
   "icons": [
     {
-      "src": "icons/icon-72x72.svg",
+      "src": "./icons/icon-72x72.svg",
       "sizes": "72x72",
       "type": "image/svg+xml",
       "purpose": "maskable any"
     },
     {
-      "src": "icons/icon-96x96.svg",
+      "src": "./icons/icon-96x96.svg",
       "sizes": "96x96",
       "type": "image/svg+xml",
       "purpose": "maskable any"
     },
     {
-      "src": "icons/icon-128x128.svg",
+      "src": "./icons/icon-128x128.svg",
       "sizes": "128x128",
       "type": "image/svg+xml",
       "purpose": "maskable any"
     },
     {
-      "src": "icons/icon-144x144.svg",
+      "src": "./icons/icon-144x144.svg",
       "sizes": "144x144",
       "type": "image/svg+xml",
       "purpose": "maskable any"
     },
     {
-      "src": "icons/icon-152x152.svg",
+      "src": "./icons/icon-152x152.svg",
       "sizes": "152x152",
       "type": "image/svg+xml",
       "purpose": "maskable any"
     },
     {
-      "src": "icons/icon-192x192.svg",
+      "src": "./icons/icon-192x192.svg",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "maskable any"
     },
     {
-      "src": "icons/icon-384x384.svg",
+      "src": "./icons/icon-384x384.svg",
       "sizes": "384x384",
       "type": "image/svg+xml",
       "purpose": "maskable any"
     },
     {
-      "src": "icons/icon-512x512.svg",
+      "src": "./icons/icon-512x512.svg",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "maskable any"
@@ -62,7 +63,7 @@
   ],
   "screenshots": [
     {
-      "src": "screenshots/mobile-1.png",
+      "src": "./screenshots/mobile-1.png",
       "sizes": "375x667",
       "type": "image/png",
       "form_factor": "narrow"

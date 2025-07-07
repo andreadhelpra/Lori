@@ -114,19 +114,23 @@ function setupSpeechRecognition() {
         isListening = false;
         resetVoiceButton();
         
+        // Don't show error for permission-related issues if we just handled them
+        if (event.error === 'not-allowed' || event.error === 'audio-capture') {
+            return; // These are handled by our permission system
+        }
+        
         let errorMessage = 'Gabim në dëgjimin e zërit.';
         switch(event.error) {
             case 'no-speech':
                 errorMessage = 'Nuk dëgjova asgjë. Provo përsëri.';
                 break;
-            case 'audio-capture':
-                errorMessage = 'Mikrofoni nuk funksionon. Kontrollo lejimet.';
-                break;
-            case 'not-allowed':
-                errorMessage = 'Ju lutem lejoni përdorimin e mikrofonit.';
-                break;
             case 'network':
                 errorMessage = 'Gabim në rrjet. Kontrollo lidhjen.';
+                break;
+            case 'aborted':
+                return; // Don't show error for user-initiated stops
+            default:
+                errorMessage = 'Gabim në dëgjimin e zërit. Provo përsëri.';
                 break;
         }
         showError(errorMessage);
@@ -139,7 +143,7 @@ function setupSpeechRecognition() {
 }
 
 function setupEventListeners() {
-    voiceBtn.addEventListener('click', toggleVoiceRecognition);
+    voiceBtn.addEventListener('click', handleVoiceButtonClick);
     playBtn.addEventListener('click', togglePlayback);
     backBtn.addEventListener('click', playPreviousSong);
     forwardBtn.addEventListener('click', playNextSongManually);
@@ -153,9 +157,6 @@ function setupEventListeners() {
     
     // Add keyboard shortcuts
     document.addEventListener('keydown', handleKeyboardShortcuts);
-    
-    // Request microphone permission on first user interaction
-    voiceBtn.addEventListener('click', requestMicrophonePermission, { once: true });
 }
 
 function handleKeyboardShortcuts(event) {
@@ -271,6 +272,16 @@ function resetProgress() {
     stopProgressUpdates();
 }
 
+async function checkMicrophonePermission() {
+    try {
+        const result = await navigator.permissions.query({ name: 'microphone' });
+        return result.state === 'granted';
+    } catch (error) {
+        // Fallback for browsers that don't support permissions API
+        return false;
+    }
+}
+
 async function requestMicrophonePermission() {
     try {
         // Request microphone permission explicitly
@@ -278,10 +289,36 @@ async function requestMicrophonePermission() {
         // Stop the stream immediately, we just needed permission
         stream.getTracks().forEach(track => track.stop());
         console.log('Microphone permission granted');
+        return true;
     } catch (error) {
         console.error('Microphone permission denied:', error);
         showError('Ju lutem lejoni përdorimin e mikrofonit për të përdorur kërkimin me zë.');
+        return false;
     }
+}
+
+async function handleVoiceButtonClick() {
+    // Hide any previous errors
+    hideError();
+    
+    if (isListening) {
+        recognition.stop();
+        return;
+    }
+    
+    // Check if we already have permission
+    const hasPermission = await checkMicrophonePermission();
+    
+    if (!hasPermission) {
+        // Request permission first
+        const granted = await requestMicrophonePermission();
+        if (!granted) {
+            return; // Permission denied, error already shown
+        }
+    }
+    
+    // Start speech recognition
+    toggleVoiceRecognition();
 }
 
 function toggleVoiceRecognition() {

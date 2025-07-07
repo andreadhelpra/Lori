@@ -1,0 +1,35 @@
+{
+  "name": "lori-music-app",
+  "version": "1.0.0",
+  "description": "A simple voice-controlled music app for Albanian speakers",
+  "main": "serve-https.js",
+  "scripts": {
+    "start": "node serve-https.js",
+    "serve": "node serve-https.js",
+    "music-proxy": "node music-proxy.js",
+    "dev": "node start-all.js",
+    "test": "echo \"Open https://localhost:3000 in your browser to test the app\""
+  },
+  "keywords": [
+    "pwa",
+    "music",
+    "voice",
+    "albanian",
+    "accessibility"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "private"
+  },
+  "private": true,
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "youtube-sr": "^4.3.12"
+  }
+}

@@ -1,0 +1,28 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="#4A90E2" stroke="#2E5B9A" stroke-width="8"/>
+  
+  <!-- Musical note -->
+  <path d="M180 180 Q180 160 200 160 L360 160 Q380 160 380 180 L380 280 Q380 320 340 320 Q300 320 300 280 Q300 260 320 260 L360 260 L360 200 L220 200 L220 320 Q220 360 180 360 Q140 360 140 320 Q140 300 160 300 L180 300 Z" fill="white"/>
+  
+  <!-- Microphone -->
+  <ellipse cx="320" cy="360" rx="30" ry="50" fill="white"/>
+  <rect x="305" y="410" width="30" height="40" fill="white"/>
+  <rect x="290" y="450" width="60" height="10" fill="white"/>
+  
+  <!-- Sound waves -->
+  <path d="M400 300 Q420 320 400 340" stroke="white" stroke-width="8" fill="none"/>
+  <path d="M420 280 Q450 320 420 360" stroke="white" stroke-width="6" fill="none"/>
+  <path d="M440 260 Q480 320 440 380" stroke="white" stroke-width="4" fill="none"/>
+  
+  <!-- Decorative musical notes -->
+  <circle cx="120" cy="120" r="12" fill="white"/>
+  <rect x="132" y="90" width="4" height="40" fill="white"/>
+  <path d="M132 90 Q145 85 150 95" stroke="white" stroke-width="3" fill="none"/>
+  
+  <circle cx="400" cy="120" r="10" fill="white"/>
+  <rect x="410" y="95" width="3" height="35" fill="white"/>
+  
+  <circle cx="450" cy="450" r="8" fill="white"/>
+  <rect x="458" y="430" width="3" height="30" fill="white"/>
+</svg> 

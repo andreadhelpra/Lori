@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lori - Muzikë me Zë</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Lori">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.svg">
+    <link rel="icon" type="image/png" href="icons/logo.png">
+    <meta name="description" content="Aplikacion muzike me kontroll zëri për gjuhën shqipe">
+    <meta name="keywords" content="muzikë, zë, shqip, Albanian music, voice control">
+</head>
+<body>
+    <div class="container">
+        <header role="banner">
+            <h1><img src="icons/logo.png" alt="Lori logo" class="inline-logo" width="40" height="40" /> Lori</h1>
+        </header>
+
+        <main role="main">
+            <section class="voice-section" aria-label="Kontrolli i zërit">
+                <button id="voiceBtn" class="voice-button" 
+                        aria-label="Kliko për të filluar dëgjimin e zërit" 
+                        aria-describedby="voice-instructions">
+                    <span class="mic-icon" aria-hidden="true">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                            <line x1="12" y1="19" x2="12" y2="23"/>
+                            <line x1="8" y1="23" x2="16" y2="23"/>
+                        </svg>
+                    </span>
+                    <span class="voice-text">Thuaj çfarë muzike do të dëgjosh</span>
+                </button>
+                
+                <div id="transcript" class="transcript hidden" role="region" aria-live="polite" aria-label="Transkripti i zërit">
+                    <p class="transcript-label">Po dëgjoj...</p>
+                    <p id="transcriptText" class="transcript-text" aria-live="polite"></p>
+                </div>
+                
+                <div id="voice-instructions" class="sr-only">
+                    Kliko butonin për të filluar dëgjimin e zërit. Thuaj emrin e artistit, këngës ose stilin e muzikës që dëshiron të dëgjosh.
+                </div>
+            </section>
+
+            <section id="musicSection" class="music-section hidden" aria-label="Luajtësi i muzikës">
+                <div class="music-info">
+                    <h2 id="songTitle" class="song-title"></h2>
+                    <p id="artist" class="artist"></p>
+                </div>
+                
+                <div class="progress-section">
+                    <div class="time-display">
+                        <span id="currentTime" class="current-time">0:00</span>
+                        <span id="totalTime" class="total-time">0:00</span>
+                    </div>
+                    <div class="progress-container">
+                        <input type="range" 
+                               id="progressSlider" 
+                               class="progress-slider" 
+                               min="0" 
+                               max="100" 
+                               value="0"
+                               aria-label="Pozicioni i këngës"
+                               title="Tërheq për të ndryshuar pozicionin e këngës">
+                        <div class="progress-track">
+                            <div id="progressFill" class="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="music-controls">
+                    <button id="backBtn" class="nav-button" 
+                            aria-label="Kënga e mëparshme"
+                            title="Kënga e mëparshme">
+                        <span class="nav-icon" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <polygon points="19,20 9,12 19,4"/>
+                                <line x1="5" y1="19" x2="5" y2="5"/>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Prapa</span>
+                    </button>
+                    
+                    <button id="playBtn" class="play-button" 
+                            aria-label="Luaj ose ndalë muzikën"
+                            aria-describedby="play-status">
+                        <span class="play-icon" aria-hidden="true">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="5,3 19,12 5,21"/>
+                            </svg>
+                        </span>
+                        <span class="play-text">Luaj</span>
+                    </button>
+                    
+                    <button id="forwardBtn" class="nav-button" 
+                            aria-label="Kënga tjetër"
+                            title="Kënga tjetër">
+                        <span class="nav-icon" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <polygon points="5,4 15,12 5,20"/>
+                                <line x1="19" y1="5" x2="19" y2="19"/>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Para</span>
+                    </button>
+                </div>
+                
+                <div id="play-status" class="sr-only" aria-live="polite"></div>
+            </section>
+
+            <section id="searchResults" class="search-results hidden" aria-label="Rezultatet e kërkimit">
+                <h3>Zgjidhni një këngë:</h3>
+                <div id="resultsList" class="results-list" role="list"></div>
+            </section>
+        </main>
+
+        <div id="status" class="status hidden" role="status" aria-live="polite"></div>
+        <div id="error" class="error hidden" role="alert" aria-live="assertive"></div>
+    </div>
+
+    <!-- Screen reader only instructions -->
+    <div class="sr-only">
+        <h2>Udhëzime për përdorim</h2>
+        <p>Kjo aplikacion ju lejon të kërkoni dhe të luani muzikë duke përdorur zërin tuaj në gjuhën shqipe.</p>
+        <ol>
+            <li>Klikoni butonin e mikrofonit për të filluar dëgjimin</li>
+            <li>Thuani emrin e artistit, këngës ose stilin e muzikës</li>
+            <li>Zgjidhni një këngë nga lista e rezultateve</li>
+            <li>Përdorni butonat e kontrollit për të luajtur ose ndalur muzikën</li>
+        </ol>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

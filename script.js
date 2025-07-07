@@ -69,6 +69,12 @@ function setupSpeechRecognition() {
     recognition.continuous = false;
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
+    
+    // iOS Safari specific settings
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+        recognition.continuous = false; // Must be false on iOS
+        recognition.interimResults = false; // More reliable on iOS
+    }
 
     recognition.onstart = function() {
         isListening = true;
@@ -119,6 +125,11 @@ function setupSpeechRecognition() {
             return; // These are handled by our permission system
         }
         
+        // Don't show errors for user-initiated actions or temporary issues
+        if (event.error === 'aborted' || event.error === 'service-not-allowed') {
+            return;
+        }
+        
         let errorMessage = 'Gabim në dëgjimin e zërit.';
         switch(event.error) {
             case 'no-speech':
@@ -127,11 +138,18 @@ function setupSpeechRecognition() {
             case 'network':
                 errorMessage = 'Gabim në rrjet. Kontrollo lidhjen.';
                 break;
-            case 'aborted':
-                return; // Don't show error for user-initiated stops
-            default:
-                errorMessage = 'Gabim në dëgjimin e zërit. Provo përsëri.';
+            case 'language-not-supported':
+                errorMessage = 'Gjuha shqipe nuk është e disponueshme. Duke provuar me gjuhën angleze...';
+                // Try with English as fallback
+                setTimeout(() => {
+                    recognition.lang = 'en-US';
+                    hideError();
+                }, 2000);
                 break;
+            default:
+                // For unknown errors, don't show message immediately - might be temporary
+                console.log('Unknown speech recognition error, not showing to user:', event.error);
+                return;
         }
         showError(errorMessage);
     };
@@ -317,15 +335,23 @@ async function handleVoiceButtonClick() {
         }
     }
     
-    // Start speech recognition
-    toggleVoiceRecognition();
+    // Small delay to ensure permission is fully processed
+    setTimeout(() => {
+        toggleVoiceRecognition();
+    }, 100);
 }
 
 function toggleVoiceRecognition() {
     if (isListening) {
         recognition.stop();
     } else {
-        recognition.start();
+        try {
+            recognition.start();
+        } catch (error) {
+            console.error('Failed to start speech recognition:', error);
+            showError('Gabim në nisjen e dëgjimit. Provo përsëri.');
+            resetVoiceButton();
+        }
     }
 }
 

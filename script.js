@@ -384,8 +384,8 @@ function generateSearchVariations(originalQuery) {
 
 async function searchMusic(query) {
     try {
-        // Use the music proxy server to search for real YouTube Music results
-        const proxyUrl = 'http://localhost:4000/search';
+        // Use the deployed music proxy server to search for real YouTube Music results
+        const proxyUrl = 'https://lori-backend.onrender.com/search';
         const searchUrl = `${proxyUrl}?q=${encodeURIComponent(query)}`;
         
         console.log('Searching for:', query);
